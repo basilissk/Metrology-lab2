@@ -97,7 +97,7 @@
             this.table.Name = "table";
             this.table.ReadOnly = true;
             this.table.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.table.Size = new System.Drawing.Size(753, 473);
+            this.table.Size = new System.Drawing.Size(753, 241);
             this.table.TabIndex = 5;
             // 
             // Column1
@@ -159,10 +159,10 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(443, 514);
+            this.textBox1.Location = new System.Drawing.Point(443, 287);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(742, 70);
+            this.textBox1.Size = new System.Drawing.Size(753, 198);
             this.textBox1.TabIndex = 6;
             // 
             // Form1

@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace lab1
         {
             Regex switchReg = new Regex("switch");
             Regex operators = new Regex(@"!=|==|=");
-            Regex conditionalOperators = new Regex("else if|if|else|case|while|for");
+            Regex conditionalOperators = new Regex("else if|if|case|while|for");
 
             code = DeleteComments(code);
             code = DeleteIncludes(code);
@@ -124,11 +125,8 @@ namespace lab1
             }
 
             rowInd = 0;
-
             rowInd = table.RowCount - 1;
-
-            table[0, rowInd].Value = $"n1 = {operatorsHash.Count}";
-            table[2, rowInd].Value = $"N1 = {operatorsMatches.Count}";
+            
            
             operatorsCount = GetOperatorsAmount(operatorsHash,operatorsMatches);
             conditionalOperatorsCount = conditionalOperatorsMatches.Count - switchMathes.Count;
@@ -174,29 +172,11 @@ namespace lab1
 
         static int CalculateMaxNestedLevel(string code)
         {
-            int maxLevel = 0;
-            int currentLevel = 0;
-            string[] lines = code.Split('\n');
-            foreach (string line in lines)
-            {
-                if (line.Contains("if") || line.Contains("else") || line.Contains("switch") || line.Contains("case"))
-                {
-                    if (line.Contains("{"))
-                    {
-                        currentLevel++;
-                        if (currentLevel > maxLevel)
-                        {
-                            maxLevel = currentLevel;
-                        }
-                    }
-                    else if (line.Contains("}"))
-                    {
-                        currentLevel--;
-                    }
-                }
-            }
-            return maxLevel;
+           
+            return 0;
         }
+
+
 
     }
 }

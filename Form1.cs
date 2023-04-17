@@ -94,45 +94,19 @@ namespace lab1
         private void bAnalys_Click(object sender, EventArgs e)
         {
 
-            int rowCount = 0;
-            int rowInd = 0;
-
             Analys();
-
-            rowCount = operatorsHash.Count + conditionalOperatorsHash.Count;
-            rowCount++;
-            table.RowCount = rowCount;
-
-            for (int i = 0; i < rowCount; i++)
-            {
-                table[0, i].Value = i + 1 + ".";
-                table[3, i].Value = i + 1 + ".";
-            }
-
-            foreach (KeyValuePair<string, int> kvp in operatorsHash)
-            {
-                table[1, rowInd].Value = kvp.Key;
-                table[2, rowInd].Value = kvp.Value;
-                rowInd++;
-            }
-
-            foreach (KeyValuePair<string, int> kvp in conditionalOperatorsHash)
-            {
-                table[1, rowInd].Value = kvp.Key;
-                table[2, rowInd].Value = kvp.Value;
-
-                rowInd++;
-            }
-
-            rowInd = 0;
-            rowInd = table.RowCount - 1;
-            
            
             operatorsCount = GetOperatorsAmount(operatorsHash,operatorsMatches);
             conditionalOperatorsCount = conditionalOperatorsMatches.Count - switchMathes.Count;
             maxMastedLevel = CalculateMaxNestedLevel(code);
-            textBox1.Text = $"CL = {conditionalOperatorsCount}\r\n" +
-                $"cl = {((float)conditionalOperatorsCount / (operatorsCount + conditionalOperatorsCount)):F2}\r\n" +
+            textBox1.Text = 
+                $"Количество операторов: {operatorsCount}\r\n"+
+                $"Количество условных операторов: {conditionalOperatorsCount}\r\n" +
+                $"Общее количество операторов: {operatorsCount + conditionalOperatorsCount}\r\n" +
+                $"Максимальный уровень вложенности: {maxMastedLevel}\r\n" +
+                $"CL = {conditionalOperatorsCount}\r\n" +
+                $"cl = {(float)conditionalOperatorsCount}" + "/" + $"{operatorsCount + conditionalOperatorsCount} " +
+                $"= {((float)conditionalOperatorsCount / (operatorsCount + conditionalOperatorsCount)):F2}\r\n" +
                 $"CLI = {maxMastedLevel}\r\n";
         }
 
@@ -170,10 +144,57 @@ namespace lab1
             return match.Count - amount;
         }
 
-        static int CalculateMaxNestedLevel(string code)
+        static public int CalculateMaxNestedLevel(string text)
         {
-           
-            return 0;
+            int maxNestedLevel = 0;
+            int currentNestedLevel = 0;
+            int index = 0;
+            string[] openKeywords = { "if", "else if", "while", "for", "case", "do" };
+            string closeKeyword = "}";
+
+            Regex switchCount = new Regex("switch");
+            MatchCollection switchMatches = switchCount.Matches(text);
+
+            while (index < text.Length)
+            {
+                bool foundOpenKeyword = false;
+                foreach (string openKeyword in openKeywords)
+                {
+                    if (text.Substring(index).StartsWith(openKeyword))
+                    {
+                        int nextCharIndex = index + openKeyword.Length;
+
+                        while (nextCharIndex < text.Length && (text[nextCharIndex] == ' ' || text[nextCharIndex] == '\n'))
+                        {
+                            nextCharIndex++;
+                        }
+
+                        {
+                            Console.WriteLine("Found open keyword " + openKeyword + "' at index " + index + " lvl " + (currentNestedLevel));
+                            index += openKeyword.Length;
+                            currentNestedLevel++;
+                            foundOpenKeyword = true;
+                            break;
+                        }
+                    }
+                }
+                if (!foundOpenKeyword && text.Substring(index).StartsWith(closeKeyword))
+                {
+                    Console.WriteLine("Found close keyword '}' at index " + index);
+                    index += closeKeyword.Length;
+                    currentNestedLevel--;
+                }
+                else
+                {
+                    index++;
+                }
+
+                if (currentNestedLevel > maxNestedLevel)
+                {
+                    maxNestedLevel = currentNestedLevel;
+                }
+            }
+            return maxNestedLevel - 1 - switchMatches.Count;
         }
 
 
